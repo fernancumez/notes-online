@@ -1,11 +1,13 @@
-import React, { Component } from 'react';//importando react
-import DatePicker from 'react-datepicker';  //Importar calendario
-import 'react-datepicker/dist/react-datepicker.css';  //Importar js del calendario 
-import axios from 'axios';  //importando el mandejar de peticiones http
+//TODO: Componente para crear nuevas notas
+
+import React, { Component } from 'react';//?importando react
+import DatePicker from 'react-datepicker';  //?Importar calendario
+import 'react-datepicker/dist/react-datepicker.css';  //?Importar js del calendario 
+import axios from 'axios';  //?importando el mandejar de peticiones http
 
 export default class CreateNote extends Component {
 
-  state = { //estado de nuestro componente
+  state = { //!estado de nuestro componente
     title: '',
     content: '',
     date: new Date(),
@@ -15,7 +17,7 @@ export default class CreateNote extends Component {
     _id: ''
   }
 
-  async componentDidMount() {  //Pedir los datos al backend
+  async componentDidMount() {  //!Pedir los datos al backend
     const res = await axios.get('http://localhost:4000/api/users');
     if (res.data.length > 0) {
       this.setState({ //Cambiar el estado de nuestra aplicacion
@@ -38,7 +40,7 @@ export default class CreateNote extends Component {
     }
   }
 
-  onSubmit = async (e) => {  //Metodo para enviar los datos al backend
+  onSubmit = async (e) => {  //*Metodo para enviar los datos al backend
     e.preventDefault();  //Evitar que la pagina se refresque
     if (this.state.editing) {
       const updatedNote = {
@@ -61,13 +63,13 @@ export default class CreateNote extends Component {
 
   }
 
-  onInputChange = (e) => { //Metodo para capturar los tados que se ingresen en el titulo y el contenido
+  onInputChange = (e) => { //*Metodo para capturar los tados que se ingresen en el titulo y el contenido
     this.setState({
       [e.target.name]: e.target.value
     })
   }
 
-  onChangeDate = date => {  //Metodo para manipular el cambio de fecha 
+  onChangeDate = date => {  //*Metodo para manipular el cambio de fecha 
     this.setState({ date });
   }
 
@@ -107,7 +109,7 @@ export default class CreateNote extends Component {
                 value={this.state.title}
                 required />
             </div>
-              {/*Ingreso de contenido variado*/}
+            {/*Ingreso de contenido variado*/}
             <div className="form-group">
               <textarea
                 type="text"
@@ -119,11 +121,11 @@ export default class CreateNote extends Component {
                 required>
               </textarea>
             </div>
-              {/*Componenete de calendario de react*/}
+            {/*Componenete de calendario de react*/}
             <div className="form-group">
-              <DatePicker 
-                className="form-control" 
-                selected={this.state.date} 
+              <DatePicker
+                className="form-control"
+                selected={this.state.date}
                 onChange={this.onChangeDate} />
             </div>
             <button className="btn btn-primary">

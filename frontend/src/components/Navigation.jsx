@@ -1,8 +1,8 @@
 
 /*
-  En este componenete haremos todo lo realicionado 
-  con el diseño de la barra de navegacion, de nuestro 
-  proyecto
+  ?En este componente haremos todo lo realicionado 
+  ?con el diseño de la barra de navegacion, de nuestro 
+  ?proyecto
 */
 
 import React, { Component } from 'react'  //importamos react

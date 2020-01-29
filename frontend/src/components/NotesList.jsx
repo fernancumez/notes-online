@@ -1,9 +1,11 @@
+//TODO: Componente para crear nuevas notas
+
 import React, { Component } from 'react';
 import axios from 'axios';
 import { format } from 'timeago.js';
 import { Link } from 'react-router-dom';
 
-export default class NotesList extends Component {
+class NotesList extends Component {
 
   state = {
     notes: []
@@ -14,13 +16,13 @@ export default class NotesList extends Component {
   }
 
   getNotes = async () => {
-    const res = await axios.get('http://localhost:4000/api/notes'); //Traer las notas almacenadas
+    const res = await axios.get('http://localhost:4000/api/notes'); //?Traer las notas almacenadas
     this.setState({
       notes: res.data
     });
   }
 
-   //Metodo para elimiar una nota
+  //!Metodo para elimiar una nota
   deleteNote = async (noteId) => {
     const response = window.confirm('Quieres eliminar esta nota?');
     if (response) {
@@ -60,3 +62,5 @@ export default class NotesList extends Component {
     )
   }
 }
+
+export default NotesList;

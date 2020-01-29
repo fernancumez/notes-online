@@ -1,5 +1,8 @@
-import React, { Component } from 'react'; //importando react
-import axios from 'axios';  //Importando axios que nos permite hacer peticiones http(put, delete, post, get)
+
+//TODO: Componente para crear usuarios
+
+import React, { Component } from 'react'; //?importando react
+import axios from 'axios';  //?Importando axios que nos permite hacer peticiones http(put, delete, post, get)
 
 class CreateUser extends Component {
 
@@ -8,7 +11,7 @@ class CreateUser extends Component {
     users: [] //Numero de usuarios
   }
 
-  async componentDidMount() {    //Metodo para pedir los usuarios registrados en el servidor
+  async componentDidMount() {    //*Metodo para pedir los usuarios registrados en el servidor
     this.getUsers();
   }
 
@@ -60,7 +63,7 @@ class CreateUser extends Component {
                 />
               </div>
               <button type="submit" className="btn btn-secondary">  {/*Guardar usuarios */}
-                <i>Guardar</i> 
+                <i>Guardar</i>
               </button>
             </form>
           </div>
