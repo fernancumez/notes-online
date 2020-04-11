@@ -6,7 +6,6 @@ import 'react-datepicker/dist/react-datepicker.css';  //?Importar js del calenda
 import axios from 'axios';  //?importando el mandejar de peticiones http
 
 export default class CreateNote extends Component {
-
   state = { //!estado de nuestro componente
     title: '',
     content: '',
@@ -28,7 +27,7 @@ export default class CreateNote extends Component {
     if (this.props.match.params.id) {
       console.log(this.props.match.params.id)
       const res = await axios.get('http://localhost:4000/api/notes/' + this.props.match.params.id);
-      console.log(res.data)
+      console.log(res.data);
       this.setState({
         title: res.data.title,
         content: res.data.content,
@@ -42,6 +41,7 @@ export default class CreateNote extends Component {
 
   onSubmit = async (e) => {  //*Metodo para enviar los datos al backend
     e.preventDefault();  //Evitar que la pagina se refresque
+
     if (this.state.editing) {
       const updatedNote = {
         title: this.state.title,
@@ -57,10 +57,9 @@ export default class CreateNote extends Component {
         author: this.state.userSelected,
         date: this.state.date
       };
-      axios.post('http://localhost:4000/api/notes', newNote);
+      await axios.post('http://localhost:4000/api/notes', newNote);
     }
     window.location.href = '/';
-
   }
 
   onInputChange = (e) => { //*Metodo para capturar los tados que se ingresen en el titulo y el contenido

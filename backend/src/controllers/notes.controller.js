@@ -36,7 +36,7 @@ notesCtrl.deleteNote = async (req, res) => {
 
 //*Funcion para actualizar un dato
 notesCtrl.updateNote = async (req, res) => {
-  const { title, content, duration, date, author } = req.body;
+  const { title, content, duration, author } = req.body;
   await Note.findByIdAndUpdate(req.params.id, {
     title,
     content,

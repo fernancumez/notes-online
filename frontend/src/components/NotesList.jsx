@@ -6,7 +6,6 @@ import { format } from 'timeago.js';
 import { Link } from 'react-router-dom';
 
 class NotesList extends Component {
-
   state = {
     notes: []
   }
