@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-//TODO: Componente para crear nuevas notas
+import React, { useState, useContext, useEffect } from "react";
+import noteContext from "../context/notes/noteContext";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
-import React, { useState, useEffect } from "react"; //?importando react
-import "react-datepicker/dist/react-datepicker.css"; //?Importar js del calendario
-import DatePicker from "react-datepicker"; //?Importar calendario
+import { Link } from "react-router-dom";
 import { URI } from "../constants";
-import axios from "axios"; //?importando el mandejar de peticiones http
+import axios from "axios";
 
-const CreateNote = ({ match }) => {
+const CreateNote = ({ match, history }) => {
   const initialState = {
     _id: "",
     title: "",
@@ -15,16 +16,17 @@ const CreateNote = ({ match }) => {
     editing: false,
     date: new Date(),
     userSelected: "",
-    users: [],
   };
 
   const [form, setForm] = useState(initialState);
+  const [users, setUsers] = useState([]);
+
+  const notesContext = useContext(noteContext);
+  const { createNotes, updatedNotes } = notesContext;
 
   useEffect(() => {
+    if (match.params.id) editingMode();
     getUsers();
-    if (match.params.id) {
-      editingMode();
-    }
   }, []);
 
   // Get all users
@@ -34,7 +36,9 @@ const CreateNote = ({ match }) => {
       console.log(data);
       if (data.length > 0) {
         let users = data.map((user) => user.username);
-        setForm({ ...form, userSelected: data[0].username, users });
+        console.log(users);
+        setForm({ ...form, userSelected: data[0].username });
+        setUsers(users);
       }
     } catch (error) {
       console.error(error);
@@ -44,6 +48,7 @@ const CreateNote = ({ match }) => {
   const editingMode = async () => {
     try {
       const { data } = await axios.get(`${URI}/notes/${match.params.id}`);
+      console.log(data);
 
       let newFormState = {
         _id: data._id,
@@ -65,14 +70,15 @@ const CreateNote = ({ match }) => {
       evt.preventDefault();
 
       if (form.editing) {
-        let updatedNote = {
+        let noteUpdated = {
+          _id: form._id,
           title: form.title,
           content: form.content,
           author: form.userSelected,
           date: form.date,
         };
 
-        await axios.put(`${URI}/notes/${form._id}`, updatedNote);
+        updatedNotes(noteUpdated, history);
       } else {
         const newNote = {
           title: form.title,
@@ -80,9 +86,8 @@ const CreateNote = ({ match }) => {
           author: form.userSelected,
           date: form.date,
         };
-        await axios.post(`${URI}/notes`, newNote);
+        createNotes(newNote, history);
       }
-      window.location.href = "/";
     } catch (error) {
       console.error(error);
     }
@@ -92,7 +97,6 @@ const CreateNote = ({ match }) => {
     //*Metodo para capturar los tados que se ingresen en el titulo y el contenido
 
     const { name, value } = evt.target;
-
     setForm({ ...form, [name]: value });
   };
 
@@ -108,7 +112,6 @@ const CreateNote = ({ match }) => {
           <h4>Crear una nota</h4>
         </div>
         <form onSubmit={handleSubmit} className="card-body">
-          {/*Seleccionar usuario */}
           <div className="form-group">
             <select
               className="form-control"
@@ -117,14 +120,14 @@ const CreateNote = ({ match }) => {
               name="userSelected"
               required
             >
-              {form.users.map((user, id) => (
+              {users.map((user, id) => (
                 <option key={id} value={user}>
                   {user}
                 </option>
               ))}
             </select>
           </div>
-          {/*Ingreso del titulo*/}
+
           <div className="form-group">
             <input
               type="text"
@@ -136,7 +139,7 @@ const CreateNote = ({ match }) => {
               required
             />
           </div>
-          {/*Ingreso de contenido variado*/}
+
           <div className="form-group">
             <textarea
               type="text"
@@ -148,7 +151,6 @@ const CreateNote = ({ match }) => {
               required
             ></textarea>
           </div>
-          {/*Componenete de calendario de react*/}
           <div className="form-group">
             <DatePicker
               className="form-control"
@@ -156,9 +158,14 @@ const CreateNote = ({ match }) => {
               onChange={onChangeDate}
             />
           </div>
-          <button className="btn btn-primary">
-            <i className="material-icons">Guardar</i>
-          </button>
+          <div className="text-center">
+            <button className="btn btn-primary" type="submit">
+              Guardar
+            </button>
+            <Link to="/">
+              <button className="btn btn-danger ml-3">Cancelar</button>
+            </Link>
+          </div>
         </form>
       </div>
     </div>

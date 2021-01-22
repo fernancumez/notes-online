@@ -1,39 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 //TODO: Componente para crear nuevas notas
 
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
+import noteContext from "../context/notes/noteContext";
 import { Link } from "react-router-dom";
 import { format } from "timeago.js";
-import { URI } from "../constants";
-import axios from "axios";
 
 const NotesList = () => {
-  const [notes, setNotes] = useState([]);
+  const notesContext = useContext(noteContext);
+  const { notes, getAllNotes, getNotes, deleteNotes } = notesContext;
 
   useEffect(() => {
+    if (!getAllNotes) return;
     getNotes();
   }, []);
-
-  const getNotes = async () => {
-    try {
-      //?Traer las notas almacenadas
-      const { data } = await axios.get(`${URI}/notes`);
-      setNotes(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleDeleteNote = async (noteId) => {
-    try {
-      const response = window.confirm("Quieres eliminar esta nota?");
-      if (!response) return;
-
-      await axios.delete(`${URI}/notes/${noteId}`);
-      getNotes();
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <div className="row">
@@ -54,10 +34,10 @@ const NotesList = () => {
               </p>
               <p>{format(note.createdAt)}</p>
             </div>
-            <div className="card-footer">
+            <div className="card-footer text-center">
               <button
                 className="btn btn-danger"
-                onClick={() => handleDeleteNote(note._id)}
+                onClick={() => deleteNotes(note._id)}
               >
                 Eliminar
               </button>
