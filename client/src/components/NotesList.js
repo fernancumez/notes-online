@@ -5,6 +5,7 @@ import React, { useContext, useEffect } from "react";
 import noteContext from "../context/notes/noteContext";
 import { Link } from "react-router-dom";
 import { format } from "timeago.js";
+import Loading from "./Loading";
 
 const NotesList = () => {
   const notesContext = useContext(noteContext);
@@ -14,6 +15,8 @@ const NotesList = () => {
     if (!getAllNotes) return;
     getNotes();
   }, []);
+
+  if (getAllNotes) return <Loading />;
 
   return (
     <div className="row">

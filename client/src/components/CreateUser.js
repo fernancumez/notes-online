@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext, useEffect } from "react";
 import userContext from "../context/users/userContext";
+import Loading from "./Loading";
 
 const CreateUser = () => {
   //Estados iniciales
@@ -37,6 +38,8 @@ const CreateUser = () => {
       console.error(error);
     }
   };
+
+  if (getAllUsers) return <Loading />;
 
   return (
     <div className="row">

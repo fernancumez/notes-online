@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext, useEffect } from "react";
-
-import noteContext from "../context/notes/noteContext";
-import userContext from "../context/users/userContext";
+import { Link } from "react-router-dom";
+import { URI } from "../constants";
+import axios from "axios";
 
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 
-import { Link } from "react-router-dom";
-import { URI } from "../constants";
-import axios from "axios";
+import noteContext from "../context/notes/noteContext";
+import userContext from "../context/users/userContext";
+import Loading from "./Loading";
 
 const CreateNote = ({ match, history }) => {
   const initialState = {
@@ -22,6 +22,7 @@ const CreateNote = ({ match, history }) => {
   };
 
   const [form, setForm] = useState(initialState);
+  const [getNote, setGetNote] = useState(false);
 
   const notesContext = useContext(noteContext);
   const usersContext = useContext(userContext);
@@ -35,6 +36,7 @@ const CreateNote = ({ match, history }) => {
   }, []);
 
   const editingMode = async () => {
+    setGetNote(true);
     try {
       const { data } = await axios.get(`${URI}/notes/${match.params.id}`);
       console.log(data);
@@ -49,8 +51,10 @@ const CreateNote = ({ match, history }) => {
       };
 
       setForm(newFormState);
+      setGetNote(false);
     } catch (error) {
       console.error(error);
+      setGetNote(false);
     }
   };
 
@@ -93,6 +97,9 @@ const CreateNote = ({ match, history }) => {
     //*Metodo para manipular el cambio de fecha
     setForm({ ...form, date });
   };
+
+  if (getNote) return <Loading />;
+  if (getAllUsers) return <Loading />;
 
   return (
     <div className="col-md-6 offset-md-3">
