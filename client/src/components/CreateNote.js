@@ -1,6 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext, useEffect } from "react";
+
 import noteContext from "../context/notes/noteContext";
+import userContext from "../context/users/userContext";
+
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 
@@ -19,31 +22,17 @@ const CreateNote = ({ match, history }) => {
   };
 
   const [form, setForm] = useState(initialState);
-  const [users, setUsers] = useState([]);
 
   const notesContext = useContext(noteContext);
+  const usersContext = useContext(userContext);
+
   const { createNotes, updatedNotes } = notesContext;
+  const { users, getUsers, getAllUsers } = usersContext;
 
   useEffect(() => {
     if (match.params.id) editingMode();
-    getUsers();
+    if (getAllUsers) getUsers();
   }, []);
-
-  // Get all users
-  const getUsers = async () => {
-    try {
-      const { data } = await axios.get(`${URI}/users`);
-      console.log(data);
-      if (data.length > 0) {
-        let users = data.map((user) => user.username);
-        console.log(users);
-        setForm({ ...form, userSelected: data[0].username });
-        setUsers(users);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const editingMode = async () => {
     try {
@@ -120,9 +109,9 @@ const CreateNote = ({ match, history }) => {
               name="userSelected"
               required
             >
-              {users.map((user, id) => (
-                <option key={id} value={user}>
-                  {user}
+              {users.map((user) => (
+                <option key={user._id} value={user.username}>
+                  {user.username}
                 </option>
               ))}
             </select>

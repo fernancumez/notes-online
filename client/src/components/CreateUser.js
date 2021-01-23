@@ -1,26 +1,23 @@
-//TODO: Componente para crear usuarios
-
-import React, { useState, useEffect } from "react"; //?importando react
-import { URI } from "../constants";
-import axios from "axios"; //?Importando axios que nos permite hacer peticiones http(put, delete, post, get)
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useContext, useEffect } from "react";
+import userContext from "../context/users/userContext";
 
 const CreateUser = () => {
   //Estados iniciales
-  const [users, setUsers] = useState([]);
   const [userName, setUserName] = useState("");
 
-  useEffect(() => {
-    getUsers();
-  }, []);
+  const usersContext = useContext(userContext);
+  const {
+    users,
+    getUsers,
+    createUsers,
+    deleteUsers,
+    getAllUsers,
+  } = usersContext;
 
-  const getUsers = async () => {
-    try {
-      const { data } = await axios.get(`${URI}/users`);
-      setUsers(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  useEffect(() => {
+    if (getAllUsers) getUsers();
+  }, []);
 
   const handleChangeUserName = (evt) => {
     const { value } = evt.target;
@@ -30,23 +27,12 @@ const CreateUser = () => {
   const handleSubmit = async (evt) => {
     try {
       evt.preventDefault();
-      await axios.post(`${URI}/users`, {
+      const newUser = {
         username: userName,
-      });
+      };
+
+      createUsers(newUser);
       setUserName("");
-      getUsers();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleDeleteUser = async (userID) => {
-    try {
-      const response = window.confirm("Quieres eliminar este usuario?");
-      if (!response) return;
-
-      await axios.delete(`${URI}/users/${userID}`);
-      getUsers();
     } catch (error) {
       console.error(error);
     }
@@ -60,8 +46,6 @@ const CreateUser = () => {
             <h3>Crear un usuario</h3>
           </div>
           <form onSubmit={handleSubmit} className="card-body">
-            {" "}
-            {/*Crear usuarios */}
             <div className="form-group">
               <input
                 className="form-control"
@@ -71,8 +55,6 @@ const CreateUser = () => {
               />
             </div>
             <button type="submit" className="btn btn-secondary">
-              {" "}
-              {/*Guardar usuarios */}
               <i>Guardar</i>
             </button>
           </form>
@@ -80,8 +62,6 @@ const CreateUser = () => {
       </div>
       <div className="col-md-8">
         <ul className="list-group">
-          {" "}
-          {/*Mostrar usuarios guardados*/}
           {users.map((user) => (
             <li
               className="list-group-item list-group-item-action"
@@ -91,7 +71,7 @@ const CreateUser = () => {
               <span>
                 <button
                   className="btn btn-danger float-right text-light cursor-pointer rounded-pill"
-                  onClick={() => handleDeleteUser(user._id)}
+                  onClick={() => deleteUsers(user._id)}
                 >
                   Eliminar
                 </button>
