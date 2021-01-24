@@ -1,14 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-//TODO: Componente para crear nuevas notas
 
 import React, { useContext, useEffect } from "react";
-import noteContext from "../context/notes/noteContext";
 import { Link } from "react-router-dom";
+
+import noteContext from "../context/notes/noteContext";
+
 import { format } from "timeago.js";
 import Loading from "./Loading";
 
 const NotesList = () => {
   const notesContext = useContext(noteContext);
+
   const { notes, getAllNotes, getNotes, deleteNotes } = notesContext;
 
   useEffect(() => {

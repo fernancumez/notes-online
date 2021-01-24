@@ -9,6 +9,8 @@ import DatePicker from "react-datepicker";
 
 import noteContext from "../context/notes/noteContext";
 import userContext from "../context/users/userContext";
+import alertContext from "../context/alerts/alertContext";
+
 import Loading from "./Loading";
 
 const CreateNote = ({ match, history }) => {
@@ -26,9 +28,11 @@ const CreateNote = ({ match, history }) => {
 
   const notesContext = useContext(noteContext);
   const usersContext = useContext(userContext);
+  const alertsContext = useContext(alertContext);
 
   const { createNotes, updatedNotes } = notesContext;
   const { users, getUsers, getAllUsers } = usersContext;
+  const { showAlerts } = alertsContext;
 
   useEffect(() => {
     if (match.params.id) editingMode();
@@ -58,7 +62,7 @@ const CreateNote = ({ match, history }) => {
     }
   };
 
-  const handleSubmit = async (evt) => {
+  const handleSubmit = (evt) => {
     try {
       evt.preventDefault();
 
@@ -71,7 +75,9 @@ const CreateNote = ({ match, history }) => {
           date: form.date,
         };
 
-        updatedNotes(noteUpdated, history);
+        updatedNotes(noteUpdated, history).then(() => {
+          showAlerts("Note updated successfully", "info");
+        });
       } else {
         const newNote = {
           title: form.title,
@@ -79,7 +85,9 @@ const CreateNote = ({ match, history }) => {
           author: form.userSelected,
           date: form.date,
         };
-        createNotes(newNote, history);
+        createNotes(newNote, history).then(() => {
+          showAlerts("Note added successfully", "success ");
+        });
       }
     } catch (error) {
       console.error(error);
@@ -116,6 +124,7 @@ const CreateNote = ({ match, history }) => {
               name="userSelected"
               required
             >
+              <option value="" />
               {users.map((user) => (
                 <option key={user._id} value={user.username}>
                   {user.username}

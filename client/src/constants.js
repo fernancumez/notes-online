@@ -7,4 +7,7 @@ export const GET_USERS = "GET_USERS";
 export const CREATE_USERS = "CREATE_USERS";
 export const DELETE_USERS = "DELETE_USERS";
 
+export const SHOW_ALERT = "SHOW_ALERT";
+export const HIDE_ALERT = "HIDE_ALERT";
+
 export const URI = "http://localhost:4000/api";

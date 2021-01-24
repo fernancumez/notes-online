@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext, useEffect } from "react";
 import userContext from "../context/users/userContext";
+import alertContext from "../context/alerts/alertContext";
 import Loading from "./Loading";
 
 const CreateUser = () => {
@@ -8,6 +9,8 @@ const CreateUser = () => {
   const [userName, setUserName] = useState("");
 
   const usersContext = useContext(userContext);
+  const alertsContext = useContext(alertContext);
+
   const {
     users,
     getUsers,
@@ -15,6 +18,7 @@ const CreateUser = () => {
     deleteUsers,
     getAllUsers,
   } = usersContext;
+  const { showAlerts } = alertsContext;
 
   useEffect(() => {
     if (getAllUsers) getUsers();
@@ -25,15 +29,17 @@ const CreateUser = () => {
     setUserName(value);
   };
 
-  const handleSubmit = async (evt) => {
+  const handleSubmit = (evt) => {
     try {
       evt.preventDefault();
       const newUser = {
         username: userName,
       };
 
-      createUsers(newUser);
-      setUserName("");
+      createUsers(newUser).then(() => {
+        showAlerts("User added successfully", "success");
+        setUserName("");
+      });
     } catch (error) {
       console.error(error);
     }
