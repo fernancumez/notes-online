@@ -1,19 +1,21 @@
+import express from "express";
+import cors from "cors";
 
-//TODO: Configuramos el puerto, los middelwares y las rutas
+import { Config } from "./config";
+import noteRoutes from "./routes/notes";
+import userRoutes from "./routes/users";
 
-const express = require('express');
-const cors = require('cors');
 const app = express();
 
-//?Configurar el servidor
-app.set('port', process.env.PORT || 4000);
+// Config
+app.set("port", Config.PORT);
 
-//*Definir funciones que  que ejecutan antes de llegar  las rutas(middlewares)
-app.use(cors());//Permite enviar y recibir datos
-app.use(express.json()); //Especifiaca que se enviaran arhivos json y formatos string
+// Middlewares
+app.use(cors());
+app.use(express.json());
 
-// routes
-app.use('/api/notes', require('./routes/notes'));   //?    Creamos rutas en nuestro servidor
-app.use('/api/users', require('./routes/users'));   //?    Creamos rutas en nuestro servidor
+// Routes
+app.use("/api/notes", noteRoutes);
+app.use("/api/users", userRoutes);
 
-module.exports = app;
+export default app;

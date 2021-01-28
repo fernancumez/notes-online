@@ -1,49 +1,81 @@
+import Note from "../models/Note";
 
-//TODO: Funciones por aparte para tener mas orden
+// Function to get only one note
+export const getNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const note = await Note.findById(id);
 
-const Note = require('../models/Note');  //?Gracias a este modelo podemos consultar, actualizar datos
-const notesCtrl = {};
+    if (!note) return res.status(404).json({ errror: "Note not found" });
 
-//*Funcion que nos permite obtener datos
-notesCtrl.getNotes = async (req, res) => {
-  const notes = await Note.find(); //Consulta todos los datos en la coleccion notes  
-  res.json(notes);
+    return res.status(200).json(note);
+  } catch (error) {
+    return res.status(400).json({ error });
+  }
 };
 
-//*Funcion cuando queremos guardar un dato
-notesCtrl.createNote = async (req, res) => {
-  const { title, content, date, author } = req.body;
-  const newNote = new Note({//Una nueva nota
-    title,
-    content,
-    date,
-    author
-  });
-  await newNote.save();//?Representa los datos que me envia el cliente
-  res.json('New Note added');
+// Function to get and list all notes
+export const getNotes = async (req, res) => {
+  try {
+    const notes = await Note.find();
+    return res.status(200).json({ notes });
+  } catch (error) {
+    return res.status(400).json({ error });
+  }
 };
 
-notesCtrl.getNote = async (req, res) => {
-  const note = await Note.findById(req.params.id);
-  res.json(note);
-}
+// Function to create new notes
+export const createNote = async (req, res) => {
+  try {
+    const { title, content, date, author } = req.body;
 
-//*Funcion para eliminar un dato
-notesCtrl.deleteNote = async (req, res) => {
-  await Note.findByIdAndDelete(req.params.id)
-  res.json('Note Deleted');
-}
+    const body = {
+      title,
+      content,
+      date,
+      author,
+    };
 
-//*Funcion para actualizar un dato
-notesCtrl.updateNote = async (req, res) => {
-  const { title, content, duration, author } = req.body;
-  await Note.findByIdAndUpdate(req.params.id, {
-    title,
-    content,
-    duration,
-    author
-  });
-  res.json('Note Updated');
-}
+    const newNote = new Note(body);
+    const note = await newNote.save();
+    return res.status(201).json({ message: "New Note added", note });
+  } catch (error) {
+    return res.status(400).json({ error });
+  }
+};
 
-module.exports = notesCtrl;
+// Function to update notes
+export const updateNote = async (req, res) => {
+  try {
+    const { title, content, duration, author } = req.body;
+
+    const data = {
+      title,
+      content,
+      duration,
+      author,
+    };
+
+    const noteUpdated = await Note.findByIdAndUpdate(req.params.id, data);
+    if (!noteUpdated) return res.status(404).json({ error: "Note not found" });
+
+    const note = await Note.findById(req.params.id);
+    return res.status(200).json({ message: "Note Updated", note });
+  } catch (error) {
+    return res.status(400).json({ error });
+  }
+};
+
+// Function to delete notes
+export const deleteNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const noteDeleted = await Note.findByIdAndDelete(id);
+    if (!noteDeleted) return res.status(404).json({ error: "Note not found" });
+
+    return res.status(200).json({ message: "Note deleted" });
+  } catch (error) {
+    return res.status(400).json({ error });
+  }
+};

@@ -1,25 +1,19 @@
-/*
-  ?En este archivo unicamente inicamos el servidor
-  ?y lo conectamos a una base de datos
-*/
+import { connect } from "mongoose";
+import { Config } from "./config";
 
-const mongoose = require("mongoose"); //modulo para conectarnos a mongodb
+export const startConnection = async () => {
+  try {
+    const URI = Config.MONGODB_URI;
+    const DBOptions = {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+    };
 
-const URI = process.env.MONGODB_URI //?direccion de nuestra base datos
-  ? process.env.MONGODB_URI //Condicion si no encuantra la direccion
-  : "mongodb://localhost/notasenlinea"; //Caso contrario conectarse a esta base de datos
-
-mongoose.connect(URI, {
-  //!Conectarnos a un sevidor de mongodb
-  useNewUrlParser: true, //
-  useCreateIndex: true, //     Modulo para conectar moongose
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
-
-const connection = mongoose.connection;
-
-connection.once("open", () => {
-  //?Cunado la conexion sea abierta ejecutar algo por consola
-  console.log("Base de datos conectado!");
-});
+    await connect(URI, DBOptions);
+    console.log("DB is connected!");
+  } catch (err) {
+    console.error(err);
+  }
+};
