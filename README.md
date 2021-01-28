@@ -1,72 +1,95 @@
-# Notes Online
-Practical Introduction to MERN Stack App (Mogodb, Express, ReactJS and NodeJs)
+<!-- PROJECT SHIELDS -->
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![MIT License][license-shield]][license-url]
 
-## Available Scripts
+<!-- PROJECT LOGO -->
 
-In the project directory, you can run:
+<p align="center">
+  <span>
+    <img src="docs/logo.png" alt="Logo" width="200">
+  </span>
+  <h3 align="center">Notes App</h3>
+  <p align="center">
+   This project is a MERN Stack application to save and list notes.
+  </p>
+</p>
 
-### `npm start`
+<!-- ABOUT THE PROJECT -->
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## About The Project
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Built With
 
-### `npm test`
+This project is built with
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [React](https://es.reactjs.org/)
+- [NodeJs](https://nodejs.org/)
+- [Express](https://expressjs.com/)
+- [MongoDB](https://www.mongodb.com/)
 
-### `npm run build`
+<!-- GETTING STARTED -->
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Getting started
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+1. Prerequisites
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- npm
 
-### `npm run eject`
+```
+npm install npm@latest -g
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+2. Installation
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Clone the repo
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+git clone https://https://github.com/fernancumez/notes-online.git
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+3. cd into folder
 
-## Learn More
+```
+cd notes-online
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4. Download client dependencies
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+cd client
+npm install
+```
 
-### Code Splitting
+5. Download server dependencies
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+```
+cd server
+npm install
+```
 
-### Analyzing the Bundle Size
+<!-- USAGE -->
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+## Usage
 
-### Making a Progressive Web App
+- Run client `cd client && npm run start`
+- Run server `cd server && npm run dev`
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+<!-- LICENSE -->
 
-### Advanced Configuration
+## License
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+Distributed under the MIT License. See `LICENSE` for more information.
 
-### Deployment
+<!-- CONTACT -->
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+## Contact
 
-### `npm run build` fails to minify
+Fernando Cúmez - [@fernancumez](https://twitter.com/fernancumez) - fernancumez@gmail.com
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Project Link: [https://github.com/fernancumez/notes-online](https://github.com/fernancumez/notes-online)
 
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=flat-square
+[license-url]: https://github.com/fernancumez/notes-online/blob/main/LICENSE
