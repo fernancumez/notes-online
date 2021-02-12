@@ -1,14 +1,14 @@
 import express from "express";
 import cors from "cors";
 
-import { Config } from "./config";
+import config from "./config";
 import noteRoutes from "./routes/notes.routes";
 import userRoutes from "./routes/users.routes";
 
 const app = express();
 
 // Config
-app.set("port", Config.PORT);
+app.set("port", config.PORT);
 
 // Middlewares
 app.use(cors());

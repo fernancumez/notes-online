@@ -1,9 +1,9 @@
-import { connect } from "mongoose";
-import { Config } from "./config";
+import { connect, connection } from "mongoose";
+import config from "./config";
 
 export const startConnection = async () => {
   try {
-    const URI = Config.MONGODB_URI;
+    const URI = config.DATABASE_URL;
     const DBOptions = {
       useNewUrlParser: true,
       useCreateIndex: true,
@@ -12,7 +12,8 @@ export const startConnection = async () => {
     };
 
     await connect(URI, DBOptions);
-    console.log("DB is connected!");
+    console.log("database is connected!");
+    console.log(connection.name);
   } catch (err) {
     console.error(err);
   }
