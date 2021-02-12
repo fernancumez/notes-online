@@ -7,7 +7,7 @@ import {
   getNote,
   deleteNote,
   updateNote,
-} from "../controllers/notes.controller";
+} from "../controllers/note.controllers";
 
 router.route("/").get(getNotes).post(createNote);
 
