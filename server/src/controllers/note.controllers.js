@@ -6,7 +6,7 @@ export const getNote = async (req, res) => {
     const { id } = req.params;
     const note = await Note.findById(id);
 
-    if (!note) return res.status(404).json({ errror: "Note not found" });
+    if (!note) return res.status(404).json({ error: "Note not found" });
 
     return res.status(200).json(note);
   } catch (error) {
