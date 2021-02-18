@@ -1,0 +1,32 @@
+### GET notes/:id
+GET http://localhost:4000/api/notes/602deaed5671352c8c6d9d7e
+
+### GET notes
+GET http://localhost:4000/api/notes
+
+### POST Creating a new note
+POST http://localhost:4000/api/notes
+Content-Type: application/json
+
+{
+   "title": "COMER",
+    "content": "Tengo que comer",
+    "author": "fernnado",
+    "date": 1613620442237
+}
+
+
+### PUT Update note
+
+PUT http://localhost:4000/api/notes/602deaed5671352c8c6d9d7e
+Content-Type: application/json
+
+{
+    "title": "COMER",
+    "content": "Tengo que comer joder",
+    "author": "fernnado",
+    "date": 1613620442237
+}
+
+### DELETE Delete note
+DELETE http://localhost:4000/api/notes/5f7b5625e02e78380c914066
