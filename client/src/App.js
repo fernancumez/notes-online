@@ -1,11 +1,5 @@
-import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Navigation from "./components/Navigation";
-import CreateNote from "./components/CreateNote";
-import CreateUser from "./components/CreateUser";
-import NotesList from "./components/NotesList";
-import About from "./components/About";
-import NotFound from "./views/404";
+import React, { Suspense } from "react";
+import { BrowserRouter, Switch } from "react-router-dom";
 
 import NoteState from "./context/notes/noteState";
 import UserState from "./context/users/userState";
@@ -15,6 +9,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
 import "./styles/App.css";
 
+import { routes } from "./routes";
+import { RoutesContainer } from "./components/RoutesContainer";
+import Navigation from "./views/Navigation";
+import Loading from "./components/Loading";
+
 const App = () => (
   <NoteState>
     <UserState>
@@ -23,12 +22,11 @@ const App = () => (
           <Navigation />
           <div className="container p-4">
             <Switch>
-              <Route path="/" exact component={NotesList} />
-              <Route path="/edit/:id" exact component={CreateNote} />
-              <Route path="/create" exact component={CreateNote} />
-              <Route path="/user" exact component={CreateUser} />
-              <Route path="/about" exact component={About} />
-              <Route component={NotFound} />
+              <Suspense fallback={<Loading />}>
+                {routes.map((route, id) => (
+                  <RoutesContainer key={id} {...route} />
+                ))}
+              </Suspense>
             </Switch>
           </div>
         </BrowserRouter>

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import noteContext from "../context/notes/noteContext";
 
 import { format } from "timeago.js";
-import Loading from "./Loading";
+import Loading from "../components/Loading";
 
 const NotesList = () => {
   const notesContext = useContext(noteContext);

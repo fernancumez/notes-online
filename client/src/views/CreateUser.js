@@ -2,7 +2,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import userContext from "../context/users/userContext";
 import alertContext from "../context/alerts/alertContext";
-import Loading from "./Loading";
+import Loading from "../components/Loading";
 
 const CreateUser = () => {
   //Estados iniciales

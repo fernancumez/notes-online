@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import alertContext from "../context/alerts/alertContext";
-import Alert from "./Alert";
+import Alert from "../components/Alert";
 
 const Navigation = () => {
   const alertsContext = useContext(alertContext);
