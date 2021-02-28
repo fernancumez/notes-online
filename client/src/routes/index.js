@@ -1,8 +1,8 @@
 import { lazy } from "react";
-const About = lazy(() => import("../components/About"));
-const CreateUser = lazy(() => import("../components/CreateUser"));
-const NotesList = lazy(() => import("../components/NotesList"));
-const CreateNote = lazy(() => import("../components/CreateNote"));
+const About = lazy(() => import("../views/About"));
+const CreateUser = lazy(() => import("../views/CreateUser"));
+const NotesList = lazy(() => import("../views/NotesList"));
+const CreateNote = lazy(() => import("../views/CreateNote"));
 
 export const routes = [
   {

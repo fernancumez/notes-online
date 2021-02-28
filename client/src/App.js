@@ -11,7 +11,7 @@ import "./styles/App.css";
 
 import { routes } from "./routes";
 import { RoutesContainer } from "./components/RoutesContainer";
-import Navigation from "./components/Navigation";
+import Navigation from "./views/Navigation";
 import Loading from "./components/Loading";
 
 const App = () => (
