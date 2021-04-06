@@ -8,9 +8,16 @@ const userSchema = new Schema(
       unique: true,
       trim: true,
     },
+    notes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Note",
+      },
+    ],
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

@@ -1,4 +1,5 @@
 import Note from "../models/note.models";
+import User from "../models/user.models";
 
 // Function to get only one note
 export const getNote = async (req, res) => {
@@ -17,7 +18,9 @@ export const getNote = async (req, res) => {
 // Function to get and list all notes
 export const getNotes = async (req, res) => {
   try {
-    const notes = await Note.find();
+    const notes = await Note.find({}).populate("author", {
+      username: 1,
+    });
     return res.status(200).json({ notes });
   } catch (error) {
     return res.status(400).json({ error });
@@ -29,15 +32,20 @@ export const createNote = async (req, res) => {
   try {
     const { title, content, date, author } = req.body;
 
-    const body = {
+    const user = await User.findById(author);
+
+    const newNote = new Note({
       title,
       content,
       date,
-      author,
-    };
+      author: user._id,
+    });
 
-    const newNote = new Note(body);
     const note = await newNote.save();
+
+    user.notes = user.notes.concat(note._id);
+    await user.save();
+
     return res.status(201).json({ message: "New Note added", note });
   } catch (error) {
     return res.status(400).json({ error });
@@ -72,7 +80,13 @@ export const deleteNote = async (req, res) => {
     const { id } = req.params;
 
     const noteDeleted = await Note.findByIdAndDelete(id);
+    console.log(noteDeleted);
     if (!noteDeleted) return res.status(404).json({ error: "Note not found" });
+
+    const user = await User.findById(noteDeleted.author);
+
+    user.notes = user.notes.filter((note) => noteDeleted.author !== note._id);
+    await user.save();
 
     return res.status(200).json({ message: "Note deleted" });
   } catch (error) {
