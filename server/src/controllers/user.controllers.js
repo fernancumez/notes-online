@@ -3,7 +3,11 @@ import User from "../models/user.models";
 // Function to get and list all users
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find({}).populate("notes", {
+      title: 1,
+      content: 1,
+      date: 1,
+    });
     return res.status(200).json({ users });
   } catch (error) {
     res.status(400).json({ error });
@@ -28,8 +32,15 @@ export const createUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const userDeleted = await User.findByIdAndDelete(id);
-    if (!userDeleted) return res.status(404).json({ error: "User not found" });
+
+    const note = await User.findById(id);
+
+    if (!note) return res.status(404).json({ error: "User not found" });
+
+    if (note.notes.length > 0)
+      return res.status(400).json({ message: "Can´t delete this user" });
+
+    await User.findByIdAndDelete(id);
 
     return res.status(200).json({ message: "User deleted" });
   } catch (error) {
