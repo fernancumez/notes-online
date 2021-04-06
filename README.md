@@ -71,8 +71,9 @@ npm install
 
 ## Usage
 
-- Run client `cd client && npm run start`
-- Run server `cd server && npm run dev`
+- Run client `cd client` && `npm run start`
+- Run server `cd server` && `npm run build` && `npm run start` for production mode
+- Run server `cd server` && `npm run dev` for development mode
 
 <!-- LICENSE -->
 
