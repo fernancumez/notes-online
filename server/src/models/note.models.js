@@ -8,12 +8,14 @@ const noteSchema = new Schema(
       required: true,
     },
     author: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
     date: Date,
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 
