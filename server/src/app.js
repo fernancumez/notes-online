@@ -9,7 +9,7 @@ import userRoutes from "./routes/users.routes";
 const app = express();
 
 // Configurations
-app.set("port", config.PORT);
+app.set("port", parseInt(config.PORT));
 
 // Middlewares
 app.use(cors());
