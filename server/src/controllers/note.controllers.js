@@ -18,10 +18,21 @@ export const getNote = async (req, res) => {
 // Function to get and list all notes
 export const getNotes = async (req, res) => {
   try {
-    const notes = await Note.find({}).populate("author", {
-      username: 1,
-    });
-    return res.status(200).json({ notes });
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+
+    const paginateOptions = {
+      limit,
+      page,
+      populate: {
+        path: "author",
+        select: "username",
+      },
+    };
+
+    const notes = await Note.paginate({}, paginateOptions);
+
+    return res.status(200).json(notes);
   } catch (error) {
     return res.status(400).json({ error });
   }
