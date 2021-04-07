@@ -1,5 +1,17 @@
 import User from "../models/user.models";
 
+export const getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    return res.status(200).json({ user });
+  } catch (error) {
+    return res.status(400).json({ error });
+  }
+};
+
 // Function to get and list all users
 export const getUsers = async (req, res) => {
   try {
@@ -10,7 +22,7 @@ export const getUsers = async (req, res) => {
     });
     return res.status(200).json({ users });
   } catch (error) {
-    res.status(400).json({ error });
+    return res.status(400).json({ error });
   }
 };
 
@@ -33,11 +45,11 @@ export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const note = await User.findById(id);
+    const user = await User.findById(id);
 
-    if (!note) return res.status(404).json({ error: "User not found" });
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-    if (note.notes.length > 0)
+    if (user.notes.length > 0)
       return res.status(400).json({ message: "Can´t delete this user" });
 
     await User.findByIdAndDelete(id);
