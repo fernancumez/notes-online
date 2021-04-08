@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { URI } from "../constants";
-import axios from "axios";
+import axios from "../libs/axios";
 
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
@@ -25,6 +24,7 @@ const CreateNote = ({ match, history }) => {
 
   const [form, setForm] = useState(initialState);
   const [getNote, setGetNote] = useState(false);
+  const [actualUserId, setActualUserId] = useState("");
 
   const notesContext = useContext(noteContext);
   const usersContext = useContext(userContext);
@@ -42,7 +42,7 @@ const CreateNote = ({ match, history }) => {
   const editingMode = async () => {
     setGetNote(true);
     try {
-      const { data } = await axios.get(`${URI}/notes/${match.params.id}`);
+      const { data } = await axios.get(`/notes/${match.params.id}`);
       console.log(data);
 
       let newFormState = {
@@ -55,6 +55,7 @@ const CreateNote = ({ match, history }) => {
       };
 
       setForm(newFormState);
+      setActualUserId(data.author);
       setGetNote(false);
     } catch (error) {
       console.error(error);
@@ -75,7 +76,7 @@ const CreateNote = ({ match, history }) => {
           date: form.date,
         };
 
-        updatedNotes(noteUpdated, history).then(() => {
+        updatedNotes(actualUserId, noteUpdated, history).then(() => {
           showAlerts("Note updated successfully", "info");
         });
       } else {
@@ -94,15 +95,11 @@ const CreateNote = ({ match, history }) => {
     }
   };
 
-  const handleChange = (evt) => {
-    //*Metodo para capturar los tados que se ingresen en el titulo y el contenido
-
-    const { name, value } = evt.target;
-    setForm({ ...form, [name]: value });
+  const handleChange = ({ target }) => {
+    setForm({ ...form, [target.name]: target.value });
   };
 
   const onChangeDate = (date) => {
-    //*Metodo para manipular el cambio de fecha
     setForm({ ...form, date });
   };
 
@@ -126,7 +123,7 @@ const CreateNote = ({ match, history }) => {
             >
               <option value="" />
               {users.map((user) => (
-                <option key={user._id} value={user.username}>
+                <option key={user._id} value={user._id}>
                   {user.username}
                 </option>
               ))}

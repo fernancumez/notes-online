@@ -1,9 +1,9 @@
 import React, { useReducer } from "react";
 import userContext from "./userContext";
 import userReducer from "./userReducer";
-import axios from "axios";
+import axios from "../../libs/axios";
 
-import { URI, GET_USERS, CREATE_USERS, DELETE_USERS } from "../../constants";
+import { GET_USERS, CREATE_USERS, DELETE_USERS } from "../../constants";
 
 const UserState = (props) => {
   const initialState = {
@@ -17,8 +17,7 @@ const UserState = (props) => {
   // Obtener todos los usuarios
   const getUsers = async () => {
     try {
-      const { data } = await axios.get(`${URI}/users`);
-      console.log(data);
+      const { data } = await axios.get("/users");
 
       dispatch({
         type: GET_USERS,
@@ -31,8 +30,7 @@ const UserState = (props) => {
 
   const createUsers = async (userData) => {
     try {
-      const { data } = await axios.post(`${URI}/users`, userData);
-      console.log(data);
+      const { data } = await axios.post(`/users`, userData);
 
       dispatch({
         type: CREATE_USERS,
@@ -48,7 +46,7 @@ const UserState = (props) => {
       const response = window.confirm("Quieres eliminar esta nota?");
       if (!response) return;
 
-      await axios.delete(`${URI}/users/${userId}`);
+      await axios.delete(`/users/${userId}`);
 
       dispatch({
         type: DELETE_USERS,

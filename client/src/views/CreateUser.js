@@ -24,9 +24,8 @@ const CreateUser = () => {
     if (getAllUsers) getUsers();
   }, []);
 
-  const handleChangeUserName = (evt) => {
-    const { value } = evt.target;
-    setUserName(value);
+  const handleChangeUserName = ({ target }) => {
+    setUserName(target.value);
   };
 
   const handleSubmit = (evt) => {
@@ -43,6 +42,14 @@ const CreateUser = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleDeleteUser = (user) => {
+    if (!user.notes.length > 0) return deleteUsers(user._id);
+    showAlerts(
+      "You cannot delete this user, until you delete the related notes",
+      "danger"
+    );
   };
 
   if (getAllUsers) return <Loading />;
@@ -80,7 +87,7 @@ const CreateUser = () => {
               <span>
                 <button
                   className="btn btn-danger float-right text-light cursor-pointer rounded-pill"
-                  onClick={() => deleteUsers(user._id)}
+                  onClick={() => handleDeleteUser(user)}
                 >
                   Eliminar
                 </button>
