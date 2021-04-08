@@ -35,7 +35,7 @@ const NotesList = () => {
               <p>{note.content}</p>
               <p>
                 <b>Autor: </b>
-                {note.author}
+                {note.author.username}
               </p>
               <p>{format(note.createdAt)}</p>
             </div>
