@@ -57,7 +57,11 @@ export const createNote = async (req, res) => {
     user.notes = user.notes.concat(note._id);
     await user.save();
 
-    return res.status(201).json({ message: "New Note added", note });
+    const savedNote = await Note.findById(note._id).populate("author", {
+      username: 1,
+    });
+
+    return res.status(201).json({ message: "New Note added", note: savedNote });
   } catch (error) {
     return res.status(400).json({ error });
   }
@@ -66,10 +70,29 @@ export const createNote = async (req, res) => {
 // Function to update notes
 export const updateNote = async (req, res) => {
   try {
-    const noteUpdated = await Note.findByIdAndUpdate(req.params.id, req.body);
+    if (req.params.userId !== req.body.author) {
+      const updateUser = await User.findById(req.params.userId);
+      updateUser.notes = updateUser.notes.filter(
+        (noteId) => noteId.toString() !== req.params.noteId
+      );
+
+      await updateUser.save();
+
+      const updatedUser = await User.findById(req.body.author);
+      updatedUser.notes = updatedUser.notes.concat(req.params.noteId);
+      await updatedUser.save();
+    }
+
+    const noteUpdated = await Note.findByIdAndUpdate(
+      req.params.noteId,
+      req.body
+    );
+
     if (!noteUpdated) return res.status(404).json({ error: "Note not found" });
 
-    const note = await Note.findById(req.params.id);
+    const note = await Note.findById(req.params.noteId).populate("author", {
+      username: 1,
+    });
     return res.status(200).json({ message: "Note Updated", note });
   } catch (error) {
     return res.status(400).json({ error });

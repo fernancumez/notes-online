@@ -11,6 +11,8 @@ import {
 
 router.route("/").get(getNotes).post(createNote);
 
-router.route("/:id").get(getNote).delete(deleteNote).put(updateNote);
+router.route("/:id").get(getNote).delete(deleteNote);
+
+router.route("/:userId/:noteId").put(updateNote);
 
 export default router;

@@ -2,7 +2,11 @@ import User from "../models/user.models";
 
 export const getUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).populate("notes", {
+      title: 1,
+      content: 1,
+      date: 1,
+    });
 
     if (!user) return res.status(404).json({ error: "User not found" });
 
@@ -32,7 +36,13 @@ export const createUser = async (req, res) => {
     const { username } = req.body;
 
     const newUser = new User({ username });
-    const user = await newUser.save();
+    await newUser.save();
+
+    const user = await User.findById(newUser.id).populate("notes", {
+      title: 1,
+      content: 1,
+      date: 1,
+    });
 
     res.status(201).json({ message: "User created", user });
   } catch (error) {
