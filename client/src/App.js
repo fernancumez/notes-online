@@ -1,13 +1,13 @@
 import React, { Suspense } from "react";
 import { BrowserRouter, Switch } from "react-router-dom";
 
-import NoteState from "./context/notes/noteState";
-import UserState from "./context/users/userState";
-import AlertState from "./context/alerts/alertState";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
 import "./styles/App.css";
+
+import NoteState from "./context/notes/noteState";
+import UserState from "./context/users/userState";
+import AlertState from "./context/alerts/alertState";
 
 import { routes } from "./routes";
 import { RoutesContainer } from "./components/RoutesContainer";

@@ -18,10 +18,21 @@ export const getNote = async (req, res) => {
 // Function to get and list all notes
 export const getNotes = async (req, res) => {
   try {
-    const notes = await Note.find({}).populate("author", {
-      username: 1,
-    });
-    return res.status(200).json({ notes });
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+
+    const paginateOptions = {
+      limit,
+      page,
+      populate: {
+        path: "author",
+        select: "username",
+      },
+    };
+
+    const notes = await Note.paginate({}, paginateOptions);
+
+    return res.status(200).json(notes);
   } catch (error) {
     return res.status(400).json({ error });
   }
@@ -46,7 +57,11 @@ export const createNote = async (req, res) => {
     user.notes = user.notes.concat(note._id);
     await user.save();
 
-    return res.status(201).json({ message: "New Note added", note });
+    const savedNote = await Note.findById(note._id).populate("author", {
+      username: 1,
+    });
+
+    return res.status(201).json({ message: "New Note added", note: savedNote });
   } catch (error) {
     return res.status(400).json({ error });
   }
@@ -55,19 +70,29 @@ export const createNote = async (req, res) => {
 // Function to update notes
 export const updateNote = async (req, res) => {
   try {
-    const { title, content, duration, author } = req.body;
+    if (req.params.userId !== req.body.author) {
+      const updateUser = await User.findById(req.params.userId);
+      updateUser.notes = updateUser.notes.filter(
+        (noteId) => noteId.toString() !== req.params.noteId
+      );
 
-    const data = {
-      title,
-      content,
-      duration,
-      author,
-    };
+      await updateUser.save();
 
-    const noteUpdated = await Note.findByIdAndUpdate(req.params.id, data);
+      const updatedUser = await User.findById(req.body.author);
+      updatedUser.notes = updatedUser.notes.concat(req.params.noteId);
+      await updatedUser.save();
+    }
+
+    const noteUpdated = await Note.findByIdAndUpdate(
+      req.params.noteId,
+      req.body
+    );
+
     if (!noteUpdated) return res.status(404).json({ error: "Note not found" });
 
-    const note = await Note.findById(req.params.id);
+    const note = await Note.findById(req.params.noteId).populate("author", {
+      username: 1,
+    });
     return res.status(200).json({ message: "Note Updated", note });
   } catch (error) {
     return res.status(400).json({ error });
@@ -80,12 +105,14 @@ export const deleteNote = async (req, res) => {
     const { id } = req.params;
 
     const noteDeleted = await Note.findByIdAndDelete(id);
-    console.log(noteDeleted);
     if (!noteDeleted) return res.status(404).json({ error: "Note not found" });
 
     const user = await User.findById(noteDeleted.author);
 
-    user.notes = user.notes.filter((note) => noteDeleted.author !== note._id);
+    user.notes = user.notes.filter(
+      (noteId) => noteId.toString() !== noteDeleted._id.toString()
+    );
+
     await user.save();
 
     return res.status(200).json({ message: "Note deleted" });

@@ -1,3 +1,5 @@
+### GET user
+GET http://localhost:4000/api/users/606df7ba51775605d89c5ee0
 
 ### GET users
 GET http://localhost:4000/api/users
@@ -11,4 +13,4 @@ Content-Type: application/json
 }
 
 ### DELETE Delete user
-DELETE http://localhost:4000/api/users/5f7b5625e02e78380c914066
+DELETE http://localhost:4000/api/users/606df495cd25c812b4bc2f5c

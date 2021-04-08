@@ -1,10 +1,9 @@
 import React, { useReducer } from "react";
 import noteContext from "./noteContext";
 import noteReducer from "./noteReducer";
-import axios from "axios";
+import axios from "../../libs/axios";
 
 import {
-  URI,
   GET_NOTES,
   DELETE_NOTES,
   UPDATE_NOTES,
@@ -23,12 +22,11 @@ const NoteState = (props) => {
   // Obtener las notas
   const getNotes = async () => {
     try {
-      const { data } = await axios.get(`${URI}/notes`);
-      console.log(data);
+      const { data } = await axios.get("/notes");
 
       dispatch({
         type: GET_NOTES,
-        payload: data.notes,
+        payload: data.docs,
       });
     } catch (error) {
       console.error(error);
@@ -37,12 +35,11 @@ const NoteState = (props) => {
 
   const createNotes = async (noteData, history) => {
     try {
-      const res = await axios.post(`${URI}/notes`, noteData);
-      console.log(res.data);
+      const { data } = await axios.post("/notes", noteData);
 
       dispatch({
         type: CREATE_NOTES,
-        payload: res.data.note,
+        payload: data.note,
       });
 
       history.push("/");
@@ -51,14 +48,16 @@ const NoteState = (props) => {
     }
   };
 
-  const updatedNotes = async (note, history) => {
+  const updatedNotes = async (actualUserId, note, history) => {
     try {
-      const res = await axios.put(`${URI}/notes/${note._id}`, note);
-      console.log(res.data);
+      const { data } = await axios.put(
+        `/notes/${actualUserId}/${note._id}`,
+        note
+      );
 
       dispatch({
         type: UPDATE_NOTES,
-        payload: res.data.note,
+        payload: data.note,
       });
 
       history.push("/");
@@ -72,7 +71,7 @@ const NoteState = (props) => {
       const response = window.confirm("Quieres eliminar esta nota?");
       if (!response) return;
 
-      await axios.delete(`${URI}/notes/${noteId}`);
+      await axios.delete(`/notes/${noteId}`);
 
       dispatch({
         type: DELETE_NOTES,

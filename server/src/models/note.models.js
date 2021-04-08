@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const noteSchema = new Schema(
   {
@@ -18,5 +19,7 @@ const noteSchema = new Schema(
     versionKey: false,
   }
 );
+
+noteSchema.plugin(mongoosePaginate);
 
 export default model("Note", noteSchema);
